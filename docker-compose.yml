@@ -1,0 +1,19 @@
+# docker-compose.yml
+# This file describes the "services" (containers) we want Docker to run for us.
+# Start everything with:  docker compose up -d
+# Stop everything with:   docker compose down
+
+services:
+  # ── Our MongoDB database ──────────────────────────────────────────
+  mongodb:                      # the name we give this service (we choose it)
+    image: mongo:7              # which ready-made image to download & run (MongoDB v7)
+    container_name: shop-mongo  # a friendly fixed name for the running container
+    ports:
+      - "27017:27017"           # map port 27017 on YOUR machine -> 27017 inside the container
+    volumes:
+      - mongo-data:/data/db     # save the DB files in a named volume so data survives restarts
+    restart: unless-stopped     # auto-restart the container if it crashes or on reboot
+
+# Named volumes are managed by Docker; this is where MongoDB's data actually lives.
+volumes:
+  mongo-data:

@@ -1,0 +1,16 @@
+{
+  "name": "shop-server",
+  "version": "1.0.0",
+  "description": "Backend API for the learning e-commerce project",
+  "type": "module",
+  "scripts": {
+    "dev": "node --watch src/app.js",
+    "start": "node src/app.js"
+  },
+  "license": "MIT",
+  "dependencies": {
+    "dotenv": "^17.4.2",
+    "express": "^5.2.1",
+    "mongoose": "^9.7.3"
+  }
+}

@@ -1,0 +1,5 @@
+# Dependencies downloaded by npm — regenerated with `npm install`, never committed
+node_modules/
+
+# Secrets (DB passwords, API keys) — NEVER commit these
+.env

@@ -1,1 +1,22 @@
-*.txt
+# Dependencies (safety net — also covered per-app)
+node_modules/
+
+# Secrets (safety net)
+.env
+.env.local
+
+# Logs
+*.log
+npm-debug.log*
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Editor files
+.vscode/*
+.idea/
+
+# Build output
+dist/
+build/
