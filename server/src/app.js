@@ -2,6 +2,7 @@
 
 import "dotenv/config";                       // load .env into process.env (must run first)
 import express from "express";
+import cors from "cors";
 import { connectDB } from "./config/db.js";
 import productRoutes from "./routes/productRoutes.js";
 import { notFound, errorHandler } from "./middleware/errorHandler.js";
@@ -11,6 +12,9 @@ await connectDB();
 
 const app = express();                        // create the Express application
 const PORT = process.env.PORT || 3000;        // read the port from .env (fallback: 3000)
+
+// Allow the React frontend (a different origin) to call this API
+app.use(cors());
 
 // Middleware: automatically parse incoming JSON request bodies into req.body
 app.use(express.json());

@@ -9,6 +9,7 @@ const productSchema = new mongoose.Schema(
     price: { type: Number, required: true, min: 0 }, // number, mandatory, never negative
     description: { type: String, default: "" },      // text, optional (empty by default)
     inStock: { type: Boolean, default: true },       // true/false, defaults to true
+    stock: { type: Number, default: 0, min: 0 },     // number, defaults to 0, never negative
   },
   { timestamps: true } // auto-add "createdAt" and "updatedAt" fields on each document
 );
