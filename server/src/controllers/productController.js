@@ -1,16 +1,26 @@
 // controllers/productController.js — the LOGIC behind each product route.
 // Each function is a route handler: it receives (req, res) and sends a response.
 
-import Product from "../models/Product.js"; // "../" goes UP one folder (controllers -> src), then into models
+import Product from "../models/Product.js";
+import redisClient from "../config/redis.js"; // the default-exported Redis client
 
 // GET /products -> return ALL products
 export async function getAllProducts(req, res) {
-  try {
-    const products = await Product.find();
-    res.json(products);
-  } catch (error) {
-    res.status(500).json({ error: error.message });
+  // 1) Try the cache first.
+  const cached = await redisClient.get("products");
+  if (cached) {
+    console.log("⚡ products served from Redis cache");
+    return res.json(JSON.parse(cached)); // cache HIT: parse the stored JSON string back to objects
   }
+
+  // 2) cache MISS: read from MongoDB.
+  console.log("🐢 products served from MongoDB (caching for next time)");
+  const products = await Product.find();
+
+  // 3) Cache the result; expire after 60 seconds (TTL). Redis stores strings only.
+  await redisClient.set("products", JSON.stringify(products), { EX: 60 });
+
+  res.json(products);
 }
 
 // GET /products/:id -> return ONE product by its id
@@ -34,6 +44,7 @@ export async function updateProduct(req, res) {
     error.statusCode = 404;
     throw error;
   }
+  await redisClient.del("products"); // invalidate the cached list of products
   res.json(updated);
 }
 
@@ -45,6 +56,7 @@ export async function deleteProduct(req, res) {
     error.statusCode = 404;
     throw error;
   }
+  await redisClient.del("products"); // invalidate the cached list of products
   res.json(deleted);
 }
 
@@ -52,5 +64,6 @@ export async function deleteProduct(req, res) {
 export async function createProduct(req, res) {
   const newProduct = new Product(req.body);
   const saved = await newProduct.save();
+  await redisClient.del("products"); // invalidate the cached list of products
   res.status(201).json(saved); // 201 = "Created"
 }
