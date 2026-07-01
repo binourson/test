@@ -4,12 +4,14 @@ import "dotenv/config";                       // load .env into process.env (mus
 import express from "express";
 import cors from "cors";
 import { connectDB } from "./config/db.js";
+import { connectRedis } from "./config/redis.js";
 import productRoutes from "./routes/productRoutes.js";
 import authRoutes from "./routes/authRoutes.js";
 import { notFound, errorHandler } from "./middleware/errorHandler.js";
 
 // Connect to MongoDB BEFORE starting the server.
 await connectDB();
+await connectRedis();
 
 const app = express();                        // create the Express application
 const PORT = process.env.PORT || 3000;        // read the port from .env (fallback: 3000)

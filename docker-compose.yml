@@ -14,6 +14,15 @@ services:
       - mongo-data:/data/db     # save the DB files in a named volume so data survives restarts
     restart: unless-stopped     # auto-restart the container if it crashes or on reboot
 
+  # ── Our Redis cache ───────────────────────────────────────────────
+  redis:
+    image: redis:7              # ready-made Redis image (v7)
+    container_name: shop-redis
+    ports:
+      - "6379:6379"             # Redis's default port
+    restart: unless-stopped
+    # No volume on purpose: cache data is disposable (rebuildable from MongoDB).
+
 # Named volumes are managed by Docker; this is where MongoDB's data actually lives.
 volumes:
   mongo-data:
