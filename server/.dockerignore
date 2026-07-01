@@ -1,0 +1,12 @@
+# Files/folders NOT to copy into the image (like .gitignore, but for docker build)
+
+# installed fresh inside the image by "npm install"
+node_modules
+
+# secrets — provided at run time instead
+.env
+
+# misc
+*.log
+Dockerfile
+.dockerignore

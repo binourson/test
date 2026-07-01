@@ -23,6 +23,34 @@ services:
     restart: unless-stopped
     # No volume on purpose: cache data is disposable (rebuildable from MongoDB).
 
+  # ── Our backend API (built from ./server/Dockerfile) ──────────────
+  backend:
+    build: ./server            # build the image from server/Dockerfile
+    container_name: shop-backend
+    ports:
+      - "3000:3000"            # host:container
+    environment:
+      # Hostnames here are the SERVICE NAMES above, NOT localhost — that's how
+      # containers reach each other on the shared compose network.
+      - MONGODB_URI=mongodb://mongodb:27017/shop
+      - REDIS_URL=redis://redis:6379
+      - JWT_SECRET=dev_only_change_me_to_a_long_random_string
+      - PORT=3000
+    depends_on:
+      - mongodb
+      - redis
+    restart: unless-stopped
+
+  # ── Our frontend (built from ./client/Dockerfile, served by nginx) ─
+  frontend:
+    build: ./client
+    container_name: shop-frontend
+    ports:
+      - "8080:80"             # visit the app at http://localhost:8080
+    depends_on:
+      - backend
+    restart: unless-stopped
+
 # Named volumes are managed by Docker; this is where MongoDB's data actually lives.
 volumes:
   mongo-data:
