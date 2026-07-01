@@ -21,6 +21,11 @@ export function errorHandler(err, req, res, next) {
     return res.status(400).json({ error: err.message });
   }
 
+  // Duplicate key (e.g. registering an email that already exists) -> Mongo code 11000.
+  if (err.code === 11000) {
+    return res.status(409).json({ error: "That value is already in use." });
+  }
+
   // Otherwise: use a status code we attached on purpose (e.g. 404), else 500.
   const status = err.statusCode || 500;
   res.status(status).json({ error: err.message || "Internal server error" });

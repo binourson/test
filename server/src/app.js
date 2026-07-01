@@ -5,6 +5,7 @@ import express from "express";
 import cors from "cors";
 import { connectDB } from "./config/db.js";
 import productRoutes from "./routes/productRoutes.js";
+import authRoutes from "./routes/authRoutes.js";
 import { notFound, errorHandler } from "./middleware/errorHandler.js";
 
 // Connect to MongoDB BEFORE starting the server.
@@ -26,6 +27,7 @@ app.get("/", (req, res) => {
 
 // Mount the product router: every URL starting with "/products" is handled by it.
 app.use("/products", productRoutes);
+app.use("/auth", authRoutes);
 
 // --- Error handling: these MUST come AFTER all routes ---
 app.use(notFound);     // no route matched the URL -> clean 404 JSON
