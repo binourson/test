@@ -69,7 +69,7 @@ export async function createProduct(req, res) {
 }
 
 export async function getProductStats(req, res) {
-  const products = await Product.find();
+  const products = await Product.find({}, {price: 1});
   const count = products.length;
   if (count === 0) {
     return res.json({count: 0, averagePrice: 0});

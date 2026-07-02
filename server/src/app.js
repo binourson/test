@@ -9,7 +9,7 @@ import productRoutes from "./routes/productRoutes.js";
 import authRoutes from "./routes/authRoutes.js";
 import { notFound, errorHandler } from "./middleware/errorHandler.js";
 
-// Connect to MongoDB BEFORE starting the server.
+// Connect to MongoDB and redis BEFORE starting the server.
 await connectDB();
 await connectRedis();
 

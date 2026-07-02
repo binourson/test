@@ -38,10 +38,10 @@ function RegisterPage() {
 
   return (
     <div className="auth">
-      <h1>Log in</h1>
+      <h1>Register</h1>
       <form onSubmit={handleSubmit}>
         <input 
-         type="name"
+         type="text"
          placeholder="Name"
          value={name}
          onChange={(e) => setName(e.target.value)}

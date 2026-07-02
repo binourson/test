@@ -17,8 +17,8 @@ const router = express.Router(); // a mini, self-contained Express router
 router.get("/", getAllProducts);    //  GET  /products      -> getAllProducts
 router.get("/stats", getProductStats); //  GET  /products/stats -> getProductStats
 router.get("/:id", getProductById); //  GET  /products/:id  -> getProductById
-router.put("/:id", updateProduct); //  PUT  /products/:id  -> updateProduct
-router.delete("/:id", deleteProduct); //  DELETE /products/:id -> deleteProduct
-router.post("/", createProduct);    //  POST /products      -> createProduct
+router.put("/:id", protect, updateProduct); //  PUT  /products/:id  -> updateProduct
+router.delete("/:id", protect, deleteProduct); //  DELETE /products/:id -> deleteProduct
+router.post("/", protect, createProduct);    //  POST /products      -> createProduct
 
 export default router;

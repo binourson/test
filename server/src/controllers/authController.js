@@ -54,3 +54,12 @@ export async function login(req, res) {
   res.json({ token, user: { _id: user._id, email: user.email, name: user.name } });
 }
 
+export async function getMe(req, res) {
+  const user = await User.findById(req.userId).select("-password");
+  if (!user) { 
+    const e = new Error("User not found");
+    e.statusCode = 404;
+    throw e; 
+  }
+  res.json(user);
+}
