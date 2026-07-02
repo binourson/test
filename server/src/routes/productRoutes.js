@@ -3,6 +3,7 @@
 import express from "express";
 import {
   getAllProducts,
+  getProductStats,
   getProductById,
   createProduct,
   updateProduct,
@@ -14,6 +15,7 @@ const router = express.Router(); // a mini, self-contained Express router
 // IMPORTANT: these paths are RELATIVE to where this router is mounted in app.js.
 // We'll mount it at "/products", so "/" here means the full path "/products".
 router.get("/", getAllProducts);    //  GET  /products      -> getAllProducts
+router.get("/stats", getProductStats); //  GET  /products/stats -> getProductStats
 router.get("/:id", getProductById); //  GET  /products/:id  -> getProductById
 router.put("/:id", updateProduct); //  PUT  /products/:id  -> updateProduct
 router.delete("/:id", deleteProduct); //  DELETE /products/:id -> deleteProduct

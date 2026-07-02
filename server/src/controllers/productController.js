@@ -67,3 +67,13 @@ export async function createProduct(req, res) {
   await redisClient.del("products"); // invalidate the cached list of products
   res.status(201).json(saved); // 201 = "Created"
 }
+
+export async function getProductStats(req, res) {
+  const products = await Product.find();
+  const count = products.length;
+  if (count === 0) {
+    return res.json({count: 0, averagePrice: 0});
+  }
+  const averagePrice = products.reduce((sum, p) => sum + p.price, 0) / count;
+  res.json({count, averagePrice});
+}
