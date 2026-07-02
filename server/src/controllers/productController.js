@@ -74,6 +74,7 @@ export async function getProductStats(req, res) {
   if (count === 0) {
     return res.json({count: 0, averagePrice: 0});
   }
-  const averagePrice = products.reduce((sum, p) => sum + p.price, 0) / count;
+  const total = products.reduce((sum, p) => sum + p.price, 0);
+  const averagePrice = Math.round((total / count) * 100) / 100;
   res.json({count, averagePrice});
 }
