@@ -1,0 +1,43 @@
+# k8s/backend.yaml — our API: 2 replicas + a Service.
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: backend
+spec:
+  replicas: 2                    # run TWO copies (k8s load-balances between them)
+  selector:
+    matchLabels:
+      app: backend
+  template:
+    metadata:
+      labels:
+        app: backend
+    spec:
+      containers:
+        - name: backend
+          image: shop-backend:latest
+          imagePullPolicy: IfNotPresent   # use the image we loaded into kind; do NOT pull from a registry
+          ports:
+            - containerPort: 3000
+          env:
+            # Hostnames are the SERVICE names — k8s DNS resolves them (like compose).
+            - name: MONGODB_URI
+              value: mongodb://mongodb:27017/shop
+            - name: REDIS_URL
+              value: redis://redis:6379
+            - name: JWT_SECRET
+              value: dev_only_change_me_to_a_long_random_string  # real setups use a k8s Secret
+            - name: PORT
+              value: "3000"                # env values must be strings in YAML
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: backend
+spec:
+  selector:
+    app: backend
+  ports:
+    - port: 3000
+      targetPort: 3000

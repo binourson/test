@@ -1,0 +1,34 @@
+# k8s/mongo.yaml — MongoDB: a Deployment (runs the pod) + a Service (stable address).
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mongodb
+spec:
+  replicas: 1                    # how many identical pods to keep running
+  selector:
+    matchLabels:
+      app: mongodb               # this Deployment manages pods with label app=mongodb
+  template:                      # the "blueprint" for each pod
+    metadata:
+      labels:
+        app: mongodb             # pods get this label (matched by the selector above + the Service)
+    spec:
+      containers:
+        - name: mongodb
+          image: mongo:7
+          ports:
+            - containerPort: 27017
+      # Note: no volume here -> data is EPHEMERAL (lost if the pod restarts).
+      # A real setup would use a PersistentVolumeClaim. Fine for learning.
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: mongodb                  # the DNS name other pods use: "mongodb"
+spec:
+  selector:
+    app: mongodb                 # route traffic to pods labeled app=mongodb
+  ports:
+    - port: 27017
+      targetPort: 27017
